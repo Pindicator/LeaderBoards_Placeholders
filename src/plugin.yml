@@ -1,0 +1,17 @@
+main: me.recar.addon.askyblock.LeaderBoardPlaceholdersPlugin
+name: ASkyblock LB Placeholders
+authors:
+  - Recarnation
+version: 1.0.1
+depend:
+  - ASkyBlock
+  - PlaceholderAPI
+commands:
+  leaderboards:
+    usage: <command>
+    description: To See all Island Levels
+    permission: aslb.top
+  aslb-reload:
+    usage: <command>
+    description: Reload The Plugin
+    permission: aslb.reload
