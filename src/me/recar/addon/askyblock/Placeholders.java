@@ -1,5 +1,6 @@
 package me.recar.addon.askyblock;
 
+import com.avaje.ebean.validation.NotNull;
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import com.wasteofplastic.askyblock.Island;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -30,30 +31,47 @@ public class Placeholders extends PlaceholderExpansion {
         UUID playerUUID;
 
         if (identifiers.length == 2) {
+
+            playerUUID = TopIslands.getIslands().get(getIndex(identifiers[1])).getOwner();
+
             switch (identifiers[0].toLowerCase()) {
                 case "owner":
-                    playerUUID = TopIslands.getIslands().get(getIndex(identifiers[1])).getOwner();
                     placeholderText = server.getOfflinePlayer(playerUUID).getName();
                     break;
 
                 case "level":
-                    playerUUID = TopIslands.getIslands().get(getIndex(identifiers[1])).getOwner();
+
                     placeholderText = String.valueOf(A_SKY_BLOCK_API.getLongIslandLevel(playerUUID));
                     break;
 
                 case "rank":
                     placeholderText = getRank(null, identifiers);
                     break;
+
+                case "name":
+                    placeholderText = getIslandName(playerUUID);
+                    break;
             }
         } else if (identifiers.length == 1) {
 
             playerUUID = offlinePlayer.getUniqueId();
 
-            if ("rank".equals(identifiers[0].toLowerCase()))
-                placeholderText = getRank(playerUUID, null);
+            switch (identifiers[0].toLowerCase()) {
+                case "rank":
+                    placeholderText = getRank(playerUUID, null);
+                    break;
+
+                case "name":
+                    placeholderText = getIslandName(playerUUID);
+                    break;
+            }
         }
 
         return placeholderText;
+    }
+
+    private String getIslandName(UUID ownerUUID) {
+        return A_SKY_BLOCK_API.getIslandName(ownerUUID);
     }
 
     private String getRank(UUID playerUUID, String[] identifiers) {
@@ -68,8 +86,7 @@ public class Placeholders extends PlaceholderExpansion {
             if (!exist) {
                 if (island.getOwner().equals(playerUUID))
                     exist = true;
-            }
-            else
+            } else
                 break;
         }
 
