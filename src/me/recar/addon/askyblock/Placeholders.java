@@ -87,6 +87,9 @@ public class Placeholders extends PlaceholderExpansion {
 
         List<UUID> membersList = ASkyBlockAPI.getInstance().getTeamMembers(ownerUUID);
 
+        if (membersList.isEmpty())
+            return members.add(Bukkit.getOfflinePlayer(ownerUUID).getName()).toString();
+
         for (UUID uuid : membersList) {
             members.add(Bukkit.getServer().getOfflinePlayer(uuid).getName());
         }
