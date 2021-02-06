@@ -5,10 +5,13 @@ import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import com.wasteofplastic.askyblock.Island;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.recar.addon.askyblock.top.islands.TopIslands;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -51,6 +54,10 @@ public class Placeholders extends PlaceholderExpansion {
                 case "name":
                     placeholderText = getIslandName(playerUUID);
                     break;
+
+                case "members":
+                    placeholderText = getMembers(playerUUID);
+                    break;
             }
         } else if (identifiers.length == 1) {
 
@@ -64,10 +71,27 @@ public class Placeholders extends PlaceholderExpansion {
                 case "name":
                     placeholderText = getIslandName(playerUUID);
                     break;
+
+                case "members":
+                    placeholderText = getMembers(playerUUID);
+                    break;
             }
         }
 
         return placeholderText;
+    }
+
+    private String getMembers(UUID ownerUUID) {
+
+        StringJoiner members = new StringJoiner("\n");
+
+        List<UUID> membersList = ASkyBlockAPI.getInstance().getTeamMembers(ownerUUID);
+
+        for (UUID uuid : membersList) {
+            members.add(Bukkit.getServer().getOfflinePlayer(uuid).getName());
+        }
+
+        return members.toString();
     }
 
     private String getIslandName(UUID ownerUUID) {
@@ -129,7 +153,6 @@ public class Placeholders extends PlaceholderExpansion {
         return "aslbp";
     }
 
-    @Override
     public String getAuthor() {
         return plugin.getDescription().getAuthors().get(0);
     }
